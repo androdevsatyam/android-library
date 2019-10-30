@@ -142,3 +142,19 @@ public class AdapterGridTwoLine extends RecyclerView.Adapter<AdapterGridTwoLine.
     }
 
 }
+
+
+
+
+
+
+// MainActivity.java
+
+    private void knowledgeComponent() {
+        String[] array_title_place = {"Concepts", "Mix Plan", "M-Classroom", "News", "Articles", "Marketing SMS", "LIC Plan", "LIC Circular"};
+        int[] array_image_place = {R.drawable.ic_face, R.drawable.ic_import_contacts_knowledge_24dp, R.drawable.ic_child_friendly, R.drawable.ic_cached_black_24dp, R.drawable.ic_face, R.drawable.ic_import_contacts_knowledge_24dp, R.drawable.ic_child_friendly, R.drawable.ic_cached_black_24dp};
+        adapterKnowledgeCenter = new AdapterKnowledgeCenter(getContext(), array_image_place, array_title_place);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(this.adapterKnowledgeCenter);
+    }
