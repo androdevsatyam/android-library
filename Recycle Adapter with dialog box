@@ -1,0 +1,144 @@
+// 1. Recycle Adapter with dialog box
+
+public class AdapterGridTwoLine extends RecyclerView.Adapter<AdapterGridTwoLine.ItemView> {
+
+    private Context ctx;
+    int[] images;
+    String[] names;
+    String[] dates;
+    private LayoutInflater layoutInflater;
+    public ClickListener clickListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, Image image, int i);
+    }
+
+    public interface OnLoadMoreListener {
+        void onLoadMore(int i);
+    }
+
+    public void setOnItemClickListener(ClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
+
+    public AdapterGridTwoLine(Context context, int[] array_image_place, String[] array_title_place, String[] array_brief_place) {
+        this.images = array_image_place;
+        this.names = array_title_place;
+        this.dates = array_brief_place;
+        this.ctx = context;
+        this.layoutInflater = LayoutInflater.from(context);
+    }
+
+    @NonNull
+    @Override
+    public ItemView onCreateViewHolder(@NonNull ViewGroup parent, final int viewType) {
+
+        View view = layoutInflater.inflate(R.layout.layout_recent_update, parent, false);
+        final ItemView viewHolder = new ItemView(view);
+
+        final Dialog dialog = new Dialog(ctx);
+        dialog.requestWindowFeature(1);
+        dialog.setContentView(R.layout.share_dialog_layout);
+        dialog.setCancelable(true);
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        layoutParams.width = -2;
+        layoutParams.height = -2;
+        TextView cancelText = dialog.findViewById(R.id.cancel_text);
+        TextView okText = dialog.findViewById(R.id.ok_text);
+        ImageView cancelButton = dialog.findViewById(R.id.cancel_button);
+        final RadioGroup radioGroup = dialog.findViewById(R.id.group_radio);
+        final TextView recipientName = dialog.findViewById(R.id.recipient_name_editText);
+        final CheckBox yourLogo = dialog.findViewById(R.id.your_logo_check);
+        final CheckBox whatsappCaption = dialog.findViewById(R.id.whatsapp_caption_check);
+        final ImageView backgroundImage = dialog.findViewById(R.id.background_image);
+
+        viewHolder.relativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.show();
+                backgroundImage.setImageResource(images[viewHolder.getAdapterPosition()]);
+            }
+        });
+
+        okText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RadioButton radioButton = dialog.findViewById(radioGroup.getCheckedRadioButtonId());
+                String radio = radioButton.getText().toString();
+
+                Toast.makeText(ctx, "Clicked = " + radio +" "+images[viewHolder.getAdapterPosition()], Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(ctx, ImageShareActivity.class);
+                intent.putExtra("greeting_image", images[viewHolder.getAdapterPosition()]);
+                intent.putExtra("recipient_name", recipientName.getText().toString());
+                intent.putExtra("title_name", radio);
+                if (yourLogo.isChecked()){
+                    intent.putExtra("your_logo", true);
+                }
+                if (whatsappCaption.isChecked()){
+                    Log.e("Your Logo", "Caption Checked");
+                }
+
+                ctx.startActivity(intent);
+            }
+        });
+
+        cancelText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.getWindow().setAttributes(layoutParams);
+
+        return viewHolder;
+    }
+
+    public void onBindViewHolder(final ItemView viewHolder, final int i) {
+        viewHolder.image.setImageResource(images[i]);
+        Log.d("IIII", ""+images[i]);
+        viewHolder.name.setText(names[i]);
+        viewHolder.brief.setText(dates[i]);
+
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return super.getItemId(position);
+    }
+
+    public int getItemCount() {
+        return this.names.length;
+    }
+
+    public class ItemView extends RecyclerView.ViewHolder {
+
+        public TextView brief;
+        public ImageView image;
+        public TextView name;
+        RelativeLayout relativeLayout;
+
+        public ItemView(View view) {
+            super(view);
+            this.image = view.findViewById(R.id.image);
+            this.name = view.findViewById(R.id.name);
+            this.brief = view.findViewById(R.id.brief);
+            relativeLayout = view.findViewById(R.id.lyt_parent);
+        }
+
+    }
+
+    public interface ClickListener {
+        void onItemClick(int position, View v);
+    }
+
+}
