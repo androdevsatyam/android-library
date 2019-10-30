@@ -1,9 +1,6 @@
 1. Taking Screenshot
 2. Sharing screenshot on whatsapp with text
 
-// Calling
-    shareScreen();
-
 
 /*-- share screenshot on whatsapp ---*/
     private void shareScreen() {
