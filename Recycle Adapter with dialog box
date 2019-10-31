@@ -19,6 +19,7 @@ public class AdapterGridTwoLine extends RecyclerView.Adapter<AdapterGridTwoLine.
 
     public void setOnItemClickListener(ClickListener clickListener) {
         this.clickListener = clickListener;
+        Toast.makeText(ctx,"Clicked",Toast.Length_Short).show();
     }
 
     public AdapterGridTwoLine(Context context, int[] array_image_place, String[] array_title_place, String[] array_brief_place) {
