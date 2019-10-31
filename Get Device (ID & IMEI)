@@ -1,0 +1,40 @@
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        PMobile();
+    }
+
+
+    public String PMobile() {
+        String Pime = "";
+        X.DeviceId = "";
+        X.M1 = "";
+        X.M2 = "";
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(this.TELEPHONY_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_DENIED)
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
+            else {
+                X.M1 = (telephonyManager.getDeviceId(0));
+                X.M2 = (telephonyManager.getDeviceId(1));
+            }
+        } else {
+            X.M1 = (telephonyManager.getDeviceId());
+        }
+
+        try {
+            X.DeviceId = "PS" + Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID).toUpperCase();
+
+            Log.i("ddd", X.DeviceId);
+        } catch (Exception y) {
+        }
+
+
+        return Pime;
+    }
+
+}
